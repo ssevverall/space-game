@@ -1,4 +1,6 @@
+import random
 import pygame
+import movements
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
@@ -7,8 +9,22 @@ running = True
 dt = 0
 
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-radius = 10
-speed = 300
+player_speed = 300
+enemy_speed = 200
+
+player = pygame.Rect(player_pos.x, player_pos.y, 10, 10)
+
+
+def generate_x_coordinate():
+    return random.randint(0, screen.get_width())
+
+
+def generate_y_coordinate():
+    return random.randint(0, screen.get_height())
+
+
+spawn = pygame.Vector2(generate_x_coordinate(), 0)
+enemy = pygame.Rect(spawn.x, spawn.y, 10, 10)
 
 while running:
     for event in pygame.event.get():
@@ -16,24 +32,21 @@ while running:
             running = False
 
     screen.fill("black")
-    pygame.draw.circle(screen, "red", player_pos, radius)
+
+    pygame.draw.rect(screen, "blue", player)
+    pygame.draw.rect(screen, "red", enemy)
 
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_w] and not (player_pos.y - (speed * dt)) < radius:
-        player_pos.y -= speed * dt
-    if keys[pygame.K_s] and not (player_pos.y + (speed * dt)) > (
-        screen.get_height() - radius
-    ):
-        player_pos.y += speed * dt
-    if keys[pygame.K_a] and not (player_pos.x - (speed * dt)) < radius:
-        player_pos.x -= speed * dt
-    if keys[pygame.K_d] and not (player_pos.x + (speed * dt)) > (
-        screen.get_width() - radius
-    ):
-        player_pos.x += speed * dt
+    movements.move_rectangle_with_bounds(screen, player, keys, player_speed, dt)
+    movements.move_rectangle_track_object(screen, enemy, enemy_speed, dt, player)
+
+    if pygame.Rect.colliderect(player, enemy):
+        screen.fill("red")
+        running = False
+
+    if enemy.y > screen.get_height():
+        enemy.x, enemy.y = generate_x_coordinate(), 0
 
     pygame.display.flip()
 
     dt = clock.tick(60) / 1000
-
-pygame.quit()
