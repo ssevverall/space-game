@@ -2,20 +2,17 @@ import pygame
 
 
 def move_rectangle(screen, rect, keys, speed, dt):
-    # Horizontal movements
     if keys[pygame.K_a]:
         pygame.Rect.move_ip(rect, -speed * dt, 0)
     if keys[pygame.K_d]:
         pygame.Rect.move_ip(rect, speed * dt, 0)
-    # Vertical movements
     if keys[pygame.K_w]:
         pygame.Rect.move_ip(rect, 0, -speed * dt)
     if keys[pygame.K_s]:
         pygame.Rect.move_ip(rect, 0, speed * dt)
 
 
-def move_rectangle_with_bounds(screen, rect, keys, speed, dt):
-    # Horizontal movements
+def move_rectangle_with_bounds(screen, rect, image, keys, speed, dt):
     if keys[pygame.K_a] and not rect.left - (speed * dt) < 0:
         pygame.Rect.move_ip(rect, -speed * dt, 0)
     if (
@@ -23,7 +20,6 @@ def move_rectangle_with_bounds(screen, rect, keys, speed, dt):
         and not rect.left + (speed * dt) > screen.get_width() - rect.width
     ):
         pygame.Rect.move_ip(rect, speed * dt, 0)
-    # Vertical movements
     if keys[pygame.K_w] and not rect.top - (speed * dt) < 0:
         pygame.Rect.move_ip(rect, 0, -speed * dt)
     if (
@@ -44,12 +40,12 @@ def move_rectangle_with_direction(screen, rect, speed, dt, direction):
         pygame.Rect.move_ip(rect, speed * dt, 0)
 
 
-def move_rectangle_track_object(screen, rect, speed, dt, target):
-    if target.x < rect.x:
+def move_rectangle_track_object(screen, rect, image, speed, dt, target):
+    if target.rect.x < rect.x:
         move_rectangle_with_direction(screen, rect, speed, dt, "left")
-    if target.x > rect.x:
+    if target.rect.x > rect.x:
         move_rectangle_with_direction(screen, rect, speed, dt, "right")
-    if target.y < rect.y:
+    if target.rect.y < rect.y:
         move_rectangle_with_direction(screen, rect, speed, dt, "up")
-    if target.y > rect.y:
+    if target.rect.y > rect.y:
         move_rectangle_with_direction(screen, rect, speed, dt, "down")
