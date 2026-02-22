@@ -1,7 +1,5 @@
 import random
-from os import path
 import pygame
-import movements
 from entities import Player, Enemy
 
 pygame.init()
@@ -19,11 +17,11 @@ def generate_y_coordinate():
     return random.randint(0, screen.get_height())
 
 
-player = Player(generate_x_coordinate(), generate_y_coordinate())
+player = Player(screen.get_width() / 2, screen.get_height() - 96)
 
 enemies = []
-for e in range(3):
-    enemies.append(Enemy(generate_x_coordinate(), generate_y_coordinate()))
+for e in range(1000):
+    enemies.append(Enemy(generate_x_coordinate(), 0))
 
 pygame.mixer.music.load("main_background_loop.ogg")
 pygame.mixer.music.set_volume(0.2)
