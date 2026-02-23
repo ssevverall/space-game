@@ -20,10 +20,10 @@ def generate_y_coordinate():
 player = Player(screen.get_width() / 2, screen.get_height() - 96)
 
 enemies = []
-for e in range(1000):
+for e in range(3):
     enemies.append(Enemy(generate_x_coordinate(), 0))
 
-pygame.mixer.music.load("main_background_loop.ogg")
+pygame.mixer.music.load("space_waves.ogg")
 pygame.mixer.music.set_volume(0.2)
 pygame.mixer.music.play(-1)
 
